@@ -26,8 +26,8 @@ public:
    WO* k4;
    WO* k5;
    WO* k6;
-   int key_count = 0;
    WOFTGLString* worldTxt;
+   int key_counter = 0;
    //std::map<PhysX*, int> bananas;
    int numBananas = 0;
 

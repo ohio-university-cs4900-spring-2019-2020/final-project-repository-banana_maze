@@ -51,9 +51,11 @@ WOWayPointAbstract* key3;
 WOWayPointAbstract* key4; 
 WOWayPointAbstract* key5;
 WOWayPointAbstract* key6;
+WOWayPointAbstract* victory;
 //using namespace physx;
 
 const std::string sharedMM = ManagerEnvironmentConfiguration::getSMM();
+
 
 GLViewNewModule* GLViewNewModule::New( const std::vector< std::string >& args )
 {
@@ -100,19 +102,7 @@ void GLViewNewModule::onCreate()
     //this->physics = PxPhysicsManager::New();
     this->banana = WObanana::New();
     worldLst->push_back(this->banana->getbananaWO());
-    /*
-    //Play the 2D music (background) - Banana Phone song - from youtube - link in assignment video
-                    and 3D music (on location) - Given Soundtrack
-    ISoundSource* noise1 = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/getout.ogg");
-    noise1->setDefaultVolume(0.9f);
-    //call the pointer to play the 3D music
-    ISound* music2 = Engine->play3D(noise1, vec3df(50, 50, 50), true);
-    //music->setIsPaused(false);
-    //music->setMinDistance(5.0f);
-    */
     //************************************************
-    collect = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
-    collect->setDefaultVolume(10.0f);
 
     ISoundSource* banana1 = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/Riffi_Bananaphone.mp3");
     banana1->setDefaultVolume(0.3f);
@@ -122,12 +112,12 @@ void GLViewNewModule::onCreate()
     this->worldTxt = this->getInitialWorldTxt();
     worldLst->push_back(this->worldTxt);
 
-    /*
+    
     ISoundSource* victory1 = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/victory.mp3");
     victory1->setDefaultVolume(1.0f);
     ISound* music1 = nullptr;
-    music1 = Engine->play3D(victory1, vec3df(410, -250, 8), true);
-    */
+    //music1 = Engine->play3D(victory1, vec3df(410, -250, 8), true);
+    
 
     //This is where I initialize the multiple ports that is able to run the multiple instances
     if (ManagerEnvironmentConfiguration::getVariableValue("NetServerLisenPort") == "12683") {
@@ -150,6 +140,7 @@ GLViewNewModule::~GLViewNewModule()
 
 void GLViewNewModule::updateWorld()
 {
+    ISound* SE = nullptr;
     //set listener position
     Engine->setListenerPosition(
         /*Position*/vec3df(cam->getPosition().x, cam->getPosition().y, cam->getPosition().z),
@@ -157,45 +148,58 @@ void GLViewNewModule::updateWorld()
         /*Velocity*/vec3df(0, 0, 0),
         /*Normal Direction\upVector*/ vec3df(cam->getNormalDirection().x, cam->getNormalDirection().y, cam->getNormalDirection().z)
     );
-    if (key_count == 6) {
+    if (key_counter == 6) {
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/door.mp3");
         worldLst->eraseViaWOptr(exit);
+        key_counter = 0;
     }
 
-    if (key1->isTriggered() == 1) {
-        ISound* sound = Engine->play2D(collect);
+    if (key1->isTriggered() == 1 ) {
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         worldLst->eraseViaWOptr(k1);
         worldLst->eraseViaWOptr(key1);
-        key_count++;
+        key1->reset_trigger();
+        key_counter++;
     }
     if (key2->isTriggered() == 1) {
-        ISound* sound = Engine->play2D(collect);
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         worldLst->eraseViaWOptr(k2);
         worldLst->eraseViaWOptr(key2);
-        key_count++;
+        key2->reset_trigger();
+        key_counter++;
     }
     if (key3->isTriggered() == 1) {
-        ISound* sound = Engine->play2D(collect);
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         worldLst->eraseViaWOptr(k3);
         worldLst->eraseViaWOptr(key3);
-        key_count++;
+        key3->reset_trigger();
+        key_counter++;
     }
     if (key4->isTriggered() == 1) {
-        ISound* sound = Engine->play2D(collect);
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         worldLst->eraseViaWOptr(k4);
         worldLst->eraseViaWOptr(key4);
-        key_count++;
+        key4->reset_trigger();
+        key_counter++;
     }
     if (key5->isTriggered() == 1) {
-        ISound* sound = Engine->play2D(collect);
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         worldLst->eraseViaWOptr(k5);
         worldLst->eraseViaWOptr(key5);
-        key_count++;
+        key5->reset_trigger();
+        key_counter++;
     }
     if (key6->isTriggered() == 1) {
-        ISound* sound = Engine->play2D(collect);
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         worldLst->eraseViaWOptr(k6);
         worldLst->eraseViaWOptr(key6);
-        key_count++;
+        key6->reset_trigger();
+        key_counter++;
+    }
+    if (victory->isTriggered() == 1) {
+        Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/victory.mp3", true, true);
+        worldLst->eraseViaWOptr(victory);
+        victory->reset_trigger();
     }
 
     Engine->setRolloffFactor(0.1f);
@@ -258,7 +262,11 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
             Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/whistle_down.mp3");
         }
         else if (key.keysym.sym == SDLK_SLASH) {
+            //this is the sound effect that will play when keys are collected. 
             Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
+        }
+        else if (key.keysym.sym == SDLK_v) {
+            Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/victory.mp3");
         }
         //recognizes moving banana
         if (this->isMoving()) { this->banana->onKeyDown(key); }
@@ -298,7 +306,15 @@ void GLViewNewModule::onKeyUp( const SDL_KeyboardEvent& key )
    if (this->isMoving()) { this->banana->onKeyUp(key); }
 }
 
+/*
+This is where the magic happens, when a key gets collected, you will here a jingle sound effect, indicating
+that you collected a key. When all 6 keys have been collected, you will hear a door creaking, that
+indicates that the exit has been opened and you can leave. 
 
+This is also where I put all of the walls, they have been hand placed individually so that I had complete 
+control over where they were at to be as precise with my maze as possible. 
+
+*/
 void Aftr::GLViewNewModule::loadMap()
 {
    this->worldLst = new WorldList(); //WorldList is a 'smart' vector that is used to store WO*'s
@@ -367,6 +383,7 @@ void Aftr::GLViewNewModule::loadMap()
 
    createNewModuleWayPoints();
 
+   //here is my list of keys and their location throughout the map. 
    k1 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
    k1->setPosition(Vector(410, -176, 11));
    worldLst->push_back(k1);
@@ -386,7 +403,7 @@ void Aftr::GLViewNewModule::loadMap()
    k6->setPosition(Vector(30, -300, 11));
    worldLst->push_back(k6);
 
-   //exit area reward :)
+   //exit area reward :) - this is the exit trophy and wall (the wall disappears when all keys are gathered). 
    WO* t = WO::New("../mm/models/trophy.dae", Vector(10, 10, 10));
    t->setPosition(Vector(410, -250, 8));
    t->rotateAboutRelZ(-1.575);
@@ -396,6 +413,12 @@ void Aftr::GLViewNewModule::loadMap()
    exit->rotateAboutRelZ(1.575);
    worldLst->push_back(exit);
    //x is red, y is green, z is blue
+
+
+   /*
+     These are all of my walls - i'm sure there is a smarter way to do it, but I wanted to do it myself,
+     more rewarding when I was finished.
+   */
 
    //starting area directional walls
    //based off of +x direction
@@ -914,6 +937,8 @@ void Aftr::GLViewNewModule::loadMap()
    box114->rotateAboutRelZ(0);
    worldLst->push_back(box114);  
 
+   //thats a lot of walls - believe me i know. 
+
 
 }
 
@@ -924,6 +949,7 @@ bool GLViewNewModule::isMoving() {
 
 void GLViewNewModule::createNewModuleWayPoints()
 {
+    
    // Create a waypoint with a radius of 3, a frequency of 5 seconds, activated by GLView's camera, and is visible.
    WayPointParametersBase params(this);
    params.frequency = 5000;
@@ -935,14 +961,30 @@ void GLViewNewModule::createNewModuleWayPoints()
    worldLst->push_back( wayPt );
    worldLst->eraseViaWOptr(wayPt);
 
+   //these are all of my waypoints, when these get triggered, each waypoint will disappear and the key 
+   //collected.
+
+   WayPointParametersBase vic(this);
+   vic.frequency = 5000;
+   vic.useCamera = true;
+   vic.visible = false;
+
+   victory = WOWP1::New(vic, 30);
+   victory->setPosition(Vector(410, -250, 0));
+   worldLst->push_back(victory);
+
    WayPointParametersBase keys(this);
    keys.frequency = 5000;
    keys.useCamera = true;
-   keys.visible = true;
+   keys.visible = false;
 
+   /*
+   I don't want to do anymore and give way the rest of the spots :)
+
+   */
    key1 = WOWP1::New(keys, 30);
    key1->setPosition(Vector(410, -175, 0));
-   //key1->getActivators()->push_back(banana);
+   //key1->getActivators()->push_back(this->banana->getbananaWO());
    worldLst->push_back(key1);
    key2 = WOWP1::New(keys, 30);
    key2->setPosition(Vector(-25, 410, 0));
