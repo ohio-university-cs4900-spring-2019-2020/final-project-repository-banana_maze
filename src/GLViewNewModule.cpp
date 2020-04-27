@@ -45,6 +45,12 @@
 
 using namespace irrklang;
 using namespace Aftr;
+WOWayPointAbstract* key1;
+WOWayPointAbstract* key2;
+WOWayPointAbstract* key3; 
+WOWayPointAbstract* key4; 
+WOWayPointAbstract* key5;
+WOWayPointAbstract* key6;
 //using namespace physx;
 
 const std::string sharedMM = ManagerEnvironmentConfiguration::getSMM();
@@ -105,13 +111,23 @@ void GLViewNewModule::onCreate()
     //music->setMinDistance(5.0f);
     */
     //************************************************
-    //ISoundSource* banana1 = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/Riffi_Bananaphone.mp3");
-    //banana1->setDefaultVolume(2.0f);
-    //ISound* music2 = Engine->play2D(banana1, true);
+    collect = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
+    collect->setDefaultVolume(10.0f);
+
+    ISoundSource* banana1 = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/Riffi_Bananaphone.mp3");
+    banana1->setDefaultVolume(0.3f);
+    ISound* music2 = Engine->play2D(banana1, true);
+
     this->initTxt = "Hit 't' to start driving the car";
     this->worldTxt = this->getInitialWorldTxt();
     worldLst->push_back(this->worldTxt);
 
+    /*
+    ISoundSource* victory1 = Engine->addSoundSourceFromFile("../irrKlang/irrKlang-64bit-1.6.0/media/victory.mp3");
+    victory1->setDefaultVolume(1.0f);
+    ISound* music1 = nullptr;
+    music1 = Engine->play3D(victory1, vec3df(410, -250, 8), true);
+    */
 
     //This is where I initialize the multiple ports that is able to run the multiple instances
     if (ManagerEnvironmentConfiguration::getVariableValue("NetServerLisenPort") == "12683") {
@@ -141,6 +157,47 @@ void GLViewNewModule::updateWorld()
         /*Velocity*/vec3df(0, 0, 0),
         /*Normal Direction\upVector*/ vec3df(cam->getNormalDirection().x, cam->getNormalDirection().y, cam->getNormalDirection().z)
     );
+    if (key_count == 6) {
+        worldLst->eraseViaWOptr(exit);
+    }
+
+    if (key1->isTriggered() == 1) {
+        ISound* sound = Engine->play2D(collect);
+        worldLst->eraseViaWOptr(k1);
+        worldLst->eraseViaWOptr(key1);
+        key_count++;
+    }
+    if (key2->isTriggered() == 1) {
+        ISound* sound = Engine->play2D(collect);
+        worldLst->eraseViaWOptr(k2);
+        worldLst->eraseViaWOptr(key2);
+        key_count++;
+    }
+    if (key3->isTriggered() == 1) {
+        ISound* sound = Engine->play2D(collect);
+        worldLst->eraseViaWOptr(k3);
+        worldLst->eraseViaWOptr(key3);
+        key_count++;
+    }
+    if (key4->isTriggered() == 1) {
+        ISound* sound = Engine->play2D(collect);
+        worldLst->eraseViaWOptr(k4);
+        worldLst->eraseViaWOptr(key4);
+        key_count++;
+    }
+    if (key5->isTriggered() == 1) {
+        ISound* sound = Engine->play2D(collect);
+        worldLst->eraseViaWOptr(k5);
+        worldLst->eraseViaWOptr(key5);
+        key_count++;
+    }
+    if (key6->isTriggered() == 1) {
+        ISound* sound = Engine->play2D(collect);
+        worldLst->eraseViaWOptr(k6);
+        worldLst->eraseViaWOptr(key6);
+        key_count++;
+    }
+
     Engine->setRolloffFactor(0.1f);
     if (this->isMoving()) {
         this->banana->update();
@@ -199,6 +256,9 @@ void GLViewNewModule::onKeyDown( const SDL_KeyboardEvent& key )
         else if (key.keysym.sym == SDLK_PERIOD)
         {
             Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/whistle_down.mp3");
+        }
+        else if (key.keysym.sym == SDLK_SLASH) {
+            Engine->play2D("../irrKlang/irrKlang-64bit-1.6.0/media/keys.mp3");
         }
         //recognizes moving banana
         if (this->isMoving()) { this->banana->onKeyDown(key); }
@@ -306,6 +366,25 @@ void Aftr::GLViewNewModule::loadMap()
    worldLst->push_back( wo );
 
    createNewModuleWayPoints();
+
+   k1 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
+   k1->setPosition(Vector(410, -176, 11));
+   worldLst->push_back(k1);
+   k2 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
+   k2->setPosition(Vector(-25, 410, 11));
+   worldLst->push_back(k2);
+   k3 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
+   k3->setPosition(Vector(-410, 410, 11));
+   worldLst->push_back(k3);
+   k4 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
+   k4->setPosition(Vector(-325, -330, 11));
+   worldLst->push_back(k4);
+   k5 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
+   k5->setPosition(Vector(410, -410, 11));
+   worldLst->push_back(k5);
+   k6 = WO::New("../mm/models/key.dae", Vector(0.02f, 0.02f, 0.02f));
+   k6->setPosition(Vector(30, -300, 11));
+   worldLst->push_back(k6);
 
    //exit area reward :)
    WO* t = WO::New("../mm/models/trophy.dae", Vector(10, 10, 10));
@@ -833,8 +912,7 @@ void Aftr::GLViewNewModule::loadMap()
    WO* box114 = WO::New("../mm/models/wall.dae", Vector(4, 4, 4));
    box114->setPosition(Vector(409, -202, 0));
    box114->rotateAboutRelZ(0);
-   worldLst->push_back(box114);
-   
+   worldLst->push_back(box114);  
 
 
 }
@@ -855,8 +933,35 @@ void GLViewNewModule::createNewModuleWayPoints()
    //x is red, y is green, z is blue
    wayPt->setPosition( Vector( 0, 0, 100 ) );
    worldLst->push_back( wayPt );
-   
+   worldLst->eraseViaWOptr(wayPt);
+
+   WayPointParametersBase keys(this);
+   keys.frequency = 5000;
+   keys.useCamera = true;
+   keys.visible = true;
+
+   key1 = WOWP1::New(keys, 30);
+   key1->setPosition(Vector(410, -175, 0));
+   key1->getActivators()->push_back(banana);
+   worldLst->push_back(key1);
+   key2 = WOWP1::New(keys, 30);
+   key2->setPosition(Vector(-25, 410, 0));
+   worldLst->push_back(key2);
+   key3 = WOWP1::New(keys, 30);
+   key3->setPosition(Vector(-410, 410, 0));
+   worldLst->push_back(key3);
+   key4 = WOWP1::New(keys, 30);
+   key4->setPosition(Vector(-325, -330, 0));
+   worldLst->push_back(key4);
+    key5= WOWP1::New(keys, 30);
+   key5->setPosition(Vector(410, -410, 0));
+   worldLst->push_back(key5);
+   key6 = WOWP1::New(keys, 30);
+   key6->setPosition(Vector(30, -300, 0));
+   worldLst->push_back(key6);
 }
+
+
 
 WOFTGLString* GLViewNewModule::getInitialWorldTxt() {
     WOFTGLString* worldString = WOFTGLString::New(sharedMM + "/fonts/primemin.ttf", 72);
@@ -967,31 +1072,7 @@ char GLViewNewModule::getShift(char c) {
 
     }
 }
-/*
-void GLViewNewModule::Bananer(Vector pos) {
-    if (pos == Vector(0, 0, 0)) {
-        pos = this->cam != nullptr ? this->cam->getPosition() : Vector(0, 0, 0);
-    }
-    PxTransform t = PxTransform(PxVec3(pos.x, pos.y, pos.z));
-    //PxShape* shape = this->physics->physics->createShape(PxBoxGeometry(2.0f, 2.0f, 2.0f), *this->physics->physics->createMaterial(0.5f, 0.3f, 0.2f));
-    PxRigidDynamic* actor = PxCreateDynamic(*this->physics->physics, t, *shape, 10.0f);
-    
-    //PhysX* wo = PhysX::New(actor, "../mm/models/banana.dae", Vector(15, 15, 15));
-    //wo->actor->userData = wo;
-    //wo->setPosition(pos);
-    //worldLst->push_back(wo);
-    //this->physics->scene->addActor(*wo->actor);
 
-    if (this->net != nullptr && this->net->isTCPSocketOpen()) {
-        NetMsgBananer msg;
-        msg.pos = pos;
-        this->net->sendNetMsgSynchronousTCP(msg);
-    }
-    this->bananas.insert(std::pair(wo, numBananas));
-    numBananas++;
-    
-}
-*/
 
 /*
 //skyBoxImageNames.push_back( ManagerEnvironmentConfiguration::getSMM() + "/images/skyboxes/sky_water+6.jpg" );

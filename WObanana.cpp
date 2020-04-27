@@ -14,7 +14,7 @@ WObanana* WObanana::New(const std::string modelFilename, Vector scale, MESH_SHAD
 	return new WObanana(modelFilename, scale, shadingType, label, pos);
 }
 
-WObanana::WObanana(const std::string modelFileName, Vector scale, MESH_SHADING_TYPE shadingType, std::string label, Vector pos) {
+WObanana::WObanana(const std::string modelFileName, Vector scale, MESH_SHADING_TYPE shadingType, std::string label, Vector pos){
 	this->speed = 0.5;
 	this->roll = 0;
 	this->driver = nullptr;

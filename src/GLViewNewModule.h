@@ -18,7 +18,15 @@ class GLViewNewModule : public GLView
 {
 public:
    WObanana* banana;
+   ISoundSource* collect;
    WO* exit;
+   WO* k1;
+   WO* k2;
+   WO* k3; 
+   WO* k4;
+   WO* k5;
+   WO* k6;
+   int key_count = 0;
    WOFTGLString* worldTxt;
    //std::map<PhysX*, int> bananas;
    int numBananas = 0;
