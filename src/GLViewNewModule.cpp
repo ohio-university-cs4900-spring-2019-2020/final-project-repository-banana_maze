@@ -942,7 +942,7 @@ void GLViewNewModule::createNewModuleWayPoints()
 
    key1 = WOWP1::New(keys, 30);
    key1->setPosition(Vector(410, -175, 0));
-   key1->getActivators()->push_back(banana);
+   //key1->getActivators()->push_back(banana);
    worldLst->push_back(key1);
    key2 = WOWP1::New(keys, 30);
    key2->setPosition(Vector(-25, 410, 0));

@@ -7,7 +7,7 @@
 #ifdef AFTR_CONFIG_USE_BOOST
 
 namespace Aftr {
-	class WObanana : public WO {
+	class WObanana { //: public WO {
 	public:
 		static WObanana* New(
 			//default looking in +x direction
